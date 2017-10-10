@@ -600,10 +600,19 @@ Enumeration 是JDK 1.0添加的接口。使用到它的函数包括Vector、Hash
 而Iterator 是JDK 1.2才添加的接口，它也是为了HashMap、ArrayList等集合提供遍历接口。Iterator是支持fail-fast机制的：当多个线程对同一个集合的内容进行操作时，就可能会产生fail-fast事件。
   
 
-
 - Java 中 *fail-fast* 和 *fail-safe* 的区别？
 
+  快速失败：当你在迭代一个集合的时候，如果有另一个线程正在修改你正在访问的那个集合时，就会抛出一个ConcurrentModification异常。
+   在java.util包下的都是快速失败。
+   
+   安全失败：你在迭代的时候会去底层集合做一个拷贝，所以你在修改上层集合的时候是不会受影响的，不会抛出ConcurrentModification异常。
+  在java.util.concurrent包下的全是安全失败的
+
+
 - 什么是 Java 优先级队列？
+
+  Java util包中的PriorityQueue类用来表示优先队列。优先队列是一个以集合为基础的抽象数据类型，队列中的每个元素都有一个优先级值。优先级值用来表示该元素的出列的优先级 
+
 
 - 什么是设计模式 [Link](https://github.com/iluwatar/java-design-patterns)
 
