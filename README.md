@@ -659,11 +659,13 @@ Android 中，Activity是所有程序的根本，所有程序的流程都运行�
 Service 是android 系统中的一种组件，它跟Activity 的级别差不多，但是他不能自己运行，只能后台运行，并且可以和其他组件进行交互。Service 是没有界面的长生命周期的代码。Service是一种程序，它可以运行很长时间，但是它却没有用户界面。这么说有点枯燥，来看个例子。打开一个音乐播放器的程序，这个时候若想上网了，那么，打开Android浏览器，这个时候虽然已经进入了浏览器这个程序，但是，歌曲播放并没有停止，而是在后台继续一首接着一首的播放。其实这个播放就是由播放音乐的Service进行控制。当然这个播放音乐的Service也可以停止，例如，当播放列表里边的歌曲都结束，或者用户按下了停止音乐播放的快捷键等。Service 可以在和多场合的应用中使用，比如播放多媒体的时候用户启动了其他Activity这个时候程序要在后台继续播放，比如检测SD 卡上文件的变化，再或者在后台记录地理信息位置的改变等等，总之服务嘛，总是藏在后头的。
 
 开启Service有两种方式:
+
 （1） Context.startService（）：Service会经历onCreate -> onStart（如果Service还没有运行，则android先调用onCreate（）然后调用onStart（）；
 　　　　如果Service已经运行，则只调用onStart（），所以一个Service的onStart方法可能会重复调用多次 ）；
 　　　　StopService的时候直接onDestroy，如果是调用者自己直接退出而没有调用StopService的话，Service会一直在后台运行。该Service的调用者再启动起来后可以通过stopService关闭Service。
 　　*注意:多次调用Context.startservice（）不会嵌套（即使会有相应的onStart（）方法被调用），所以无论同一个服务被启动了多少次，一旦调用Context.stopService（）或者StopSelf（），他都会被停止。
 　　补充说明：传递给StartService（0的Intent对象会传递给onStart（）方法。调用顺序为：onCreate --> onStart（可多次调用) --> onDestroy。
+
 （2） Context.bindService（）：Service会经历onCreate（） -->onBind（），onBind将返回给客户端一个IBind接口实例，IBind允许客户端回调服务的方法，比如得到Service运行的状态或其他操作。这个时候把调用者（Context，例如Activity）会和Service绑定在一起，Context退出了，Srevice就会调用onUnbind --> onDestroyed相应退出，所谓绑定在一起就共存亡了。
 
 3. 广播接收器
@@ -676,6 +678,46 @@ Content Provider 是Android提供的第三方应用数据的访问方案。
 　　在Android中，对数据的保护是很严密的，除了放在SD卡中的数据，一个应用所持有的数据库、文件等内容，都是不允许其他直接访问的。Andorid当然不会真的把每个应用都做成一座孤岛，它为所有应用都准备了一扇窗，这就是Content Provider。应用想对外提供的数据，可以通过派生Content Provider类， 封装成一枚Content Provider，每个Content Provider都用一个uri作为独立的标识，形如：content://com.xxxxx。所有东西看着像REST的样子，但实际上，它比REST 更为灵活。和REST类似，uri也可以有两种类型，一种是带id的，另一种是列表的，但实现者不需要按照这个模式来做，给id的uri也可以返回列表类型的数据，只要调用者明白，就无妨，不用苛求所谓的REST。
 
 * Service 与 IntentService 的区别。[Link](https://stackoverflow.com/a/15772151/5153275)
+
+    主要的区别是：
+
+    - 何时用它们？
+
+    1. Service在没有UI的任务中使用，但是不宜运行太久。如果你要执行长任务，请在
+    Service里使用线程。
+
+    2. IntentService能在不和主线程交互的情况下执行长任务。如果你需要和主线程交互，
+    你可以选择主线程的handler或者broadcast intent。其他使用情况是当你需要回调方法时（比如
+    被Intent触发的任务）
+
+    - 如何被触发
+
+    1. Service是通过`startService`
+
+    2. IntentService是通过Intent触发，它会产生一个工作线程，并且`onHandleIntent()`方法会被在这个线程上调用
+
+    - 在哪里被触发
+
+    从任何线程，活动或者应用组件，都有可能触发这两个东西
+
+    - 运行在
+
+    1. Service 是在后台运行的，但是却是在应用的主线程上运行
+
+    2. IntentService是运行在一个分开的工作线程上
+
+    - 限制和缺点
+
+    1. Service可能会阻塞主线程
+
+    2. IntentService不能并发地运行任务，故所有连续发来的Intent会进入工作线程的消息队列，然后被顺序地执行
+
+    - 何时停止
+
+    1. 如果你实现了一个`Service`， 那么你有责任来停止它，当任务完成了，你可以用`stopSelf()`或则`stopService()`来停止（如果你只想提供绑定，你不必去实现这个方法）
+
+    2. IntentService会在所有请求被处理之后自动停止服务，所以你永远不必调用`stopSelf()`
+
 
 * Android 应用的结构是什么？
 
