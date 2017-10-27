@@ -721,7 +721,69 @@ Content Provider 是Android提供的第三方应用数据的访问方案。
 
 * Android 应用的结构是什么？
 
+  src 目录
+
+  是源代码目录， 所有允许用户修改的 java 文件和用户自己添加的 java 文件都保存在这个目录中
+
+  gen 目录
+
+  是 1.5 版本新增的目录，用来保存 ADT 自动生成的 java 文件，例如 R.java 或 AIDL 文件。注意：
+
+  - R．java 文件（非常重要）
+
+  1) R.java 文件是 ADT 自动生成的文件，包含对 drawable、layout 和 values 目录内的资源的引用指针，Android 程序能够直接通过 R 类引用目录中的资源 
+  
+  2) R.java 文件不能手工修改，如果向资源目录中增加或删除了资源文件，则需要在工程名称上右击，选择 Refresh 来更新 R.java 文件中的代码 
+  
+  3) R 类包含的几个内部类，分别与资源类型相对应，资源 ID 便保存在这些内部类中，例如子类drawable 表示图像资源，内部的静态变量 icon 表示资源名称，其资源 ID 为 0x7f020000。一般情况下，资源名称与资源文件名相同
+
+  - android.jar 文件
+
+  是 Android 程序所能引用的函数库文件，Android 通过平台所支持 API 都包含在这个文件中
+
+  - assets 目录
+
+  用来存放原始格式的文件，例如音频文件、视频文件等二进制格式文件。此目录中的资源不能被 R.java 文件索引。，所以只能以资截流的形式读取。一般情况下为空
+
+  - layout 目录
+
+  用来存放我们为每个界面写的布局文件
+
+  - Strings.xml 文件
+
+  是程序中的一些字符串的引用
+
+  - AndroidManifest.xml
+
+  是 XML 格式的 Android 程序声明文件，包含了 Android 系统运行Android 程序前所必须掌握的重要信息，这些信息包含应用程序名称、图标、包名称、模块组成、授权和 SDK 最低版本等，而且每个 Android 程序必须在根目录下包含一个 AndroidManifest.xml文件 
+
+  注：AndroidMainfest.xml 文件： 
+  
+  1) AndroidManifest.xml 文件的根元素是 manifest，包含了 xmlns:android、package、 android:versionCode 和 android:versionName 共 4 个属性 
+  
+  2) xmlns:android 定义了 Android 的命名空间，值为 `http://schemas.android.com/apk/res/android` 
+  3) package 定义了应用程序的包名称 
+  
+  4) android:versionCode 定义了应用程序的版本号，是一个整数值，数值越大说明版本越新，但仅在程序内部使用，并不提供给应用程序的使用者
+  
+  5) android:versionName 定义了应用程序的版本名称，是一个字符串，仅限于为用户提供一个版本标识 
+  
+  6) manifest 元素仅能包含一个 application 元素， application 元素中能够声明 Android 程序中最重要的四个组成部分，包括 Activity、Service、BroadcastReceiver 和 ContentProvider，所定义的属性将影响所有组成部分 
+  
+  7) android:icon 定义了 Android 应用程序的图标，其中@drawable/icon 是一种资源引用方式，表示资源类型是图像，资源名称为 icon，对应的资源文件为 res/drawable 目录下的 icon.png 
+
+  8) android:label 则定义了 Android 应用程序的标签名称default.properties 文件记录 Android 工程的相关设置，该文件不能手动修改，需右键单击工程名称，选择“Properties”进行修改 
+
+
 * Android 应用中如何保存数据。
+
+  1. 使用SharedPreferences存储数据
+  2. 文件存储数据
+  3. SQLite数据库存储数据
+  4. 使用ContentProvider存储数据
+  5. 网络存储数据
+  
+
 
 * 如何在 Android 应用中执行耗时操作。
 
