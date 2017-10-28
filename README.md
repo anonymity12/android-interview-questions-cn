@@ -783,9 +783,9 @@ Content Provider 是Android提供的第三方应用数据的访问方案。
   4. 使用ContentProvider存储数据
   5. 网络存储数据
   
-
-
 * 如何在 Android 应用中执行耗时操作。
+
+    开启新线程进行耗时操作，如果需要和UI线程通信，则使用Handler机制
 
 * 两个 Fragment 之间如何通信。
 
