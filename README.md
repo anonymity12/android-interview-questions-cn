@@ -789,6 +789,15 @@ Content Provider 是Android提供的第三方应用数据的访问方案。
 
 * 两个 Fragment 之间如何通信。
 
+  两个Fragment之间不能直接通信，只能通过它们所寄生的Activity作为桥梁进行通信。
+  
+  具体怎么实现呢？分两步：
+  
+   1. 在F1里面定义接口，A里面实现接口。通过回调实现F1与其父亲A的通信。
+   2. 在A接口回调方法里与F2通信，将参数传给F2
+
+  见 http://note.youdao.com/noteshare?id=bd0a54c360050a4574f57b6728d382c8
+
 * 阐述一下 Android 的通知系统。
 
 * 两个不同的 app 之间如何交互。
