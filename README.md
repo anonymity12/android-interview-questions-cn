@@ -434,6 +434,7 @@
   `Object obj = new Object();`
   
   软引用： 非必须引用，内存溢出之前进行回收
+ 
   ```
   Object obj = new Object();
   SoftReference<Object> sf = new SoftReference<Object>(obj);
@@ -443,22 +444,26 @@
   
   弱引用： 第二次垃圾回收时回收
   
-  ```
+ ```
+ 
   Object obj = new Object();
   WeakReference<Object> wf = new WeakReference<Object>(obj);
   obj = null;
   wf.get();//有时候会返回null
   wf.isEnQueued();//返回是否被垃圾回收器标记为即将回收的垃圾
+  
   ```
   
   虚引用： 垃圾回收时回收，无法通过引用取到对象值
   
-  ```
+ ```
+ 
   Object obj = new Object();
   PhantomReference<Object> pf = new PhantomReference<Object>(obj);
   obj=null;
   pf.get();//永远返回null
   pf.isEnQueued();//返回是否从内存中已经删除
+  
   ```
 
   具体笔记可参考：http://note.youdao.com/noteshare?id=d52d8dd97e8dc162ddc90ff72a5c6001
