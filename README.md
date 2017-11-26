@@ -811,11 +811,35 @@ Content Provider 是Android提供的第三方应用数据的访问方案。
 
 * 为什么建议只使用默认的构造方法来创建 Fragment？[Link](https://stackoverflow.com/a/16042750/2809326)
 
+  我来好好回答一下：为什么使用bundle来传递参数比使用一个非默认的构造器更好。
+  
+  原因在于：系统会在保存一个fragment的时候会自动保存你的bundle。
+  
+  回调方法中，`onCreate`和`onCreateView`都会从bundle中读取参数——这样的话，就能保证你能获得 与fragment初始化
+  时候的相同的状态。（注意：这里的状态与传递到`onCreate/onCreateView`的`onSaveInstanceState bundle`可能是不同的。
+  
+  那么为什么推荐使用`newInstance()`这种静态方法的方式呢？别管了，这仅仅是一种推荐。其实你可以使用一个非默认的构造器，
+  只要你确保在构造器的bundle里放入初始化参数。并且要复写`onCreate()`和`onCreateView()`,在这里读取那些参数。
+
 * 为什么 Bundle 被用来传递数据，为什么不能使用简单的 Map 数据结构？
+
+   1.Bundle内部是由ArrayMap实现的，ArrayMap的内部实现是两个数组，一个int数组是存储对象数据对应下标，一个对象数组保存key和value，内部使用二分法对key进行排序，所以在添加、删除、查找数据的时候，都会使用二分法查找，只适合于小数据量操作，如果在数据量比较大的情况下，那么它的性能将退化。而HashMap内部则是数组+链表结构，所以在数据量较少的时候，HashMap的Entry Array比ArrayMap占用更多的内存。因为使用Bundle的场景大多数为小数据量，我没见过在两个Activity之间传递10个以上数据的场景，所以相比之下，在这种情况下使用ArrayMap保存数据，在操作速度和内存占用上都具有优势，因此使用Bundle来传递数据，可以保证更快的速度和更少的内存占用。
+
+  2.另外一个原因，则是在Android中如果使用Intent来携带数据的话，需要数据是基本类型或者是可序列化类型，HashMap使用Serializable进行序列化，而Bundle则是使用Parcelable进行序列化。而在Android平台中，更推荐使用Parcelable实现序列化，虽然写法复杂，但是开销更小，所以为了更加快速的进行数据的序列化和反序列化，系统封装了Bundle类，方便我们进行数据的传输。
+
 
 * 阐述一下 Fragment 的生命周期。[Link](https://www.techsfo.com/blog/wp-content/uploads/2014/08/complete_android_fragment_lifecycle.png)
 
+  ![](https://www.techsfo.com/blog/wp-content/uploads/2014/08/complete_android_fragment_lifecycle.png)
+
+  详细的叙述，在http://note.youdao.com/noteshare?id=a4d38a3bd3773e77c9e75fc93775aec6&sub=wcp1511666592646827
+
 * 如何理解 Android 的 Dialog ？
+
+  Dialog和PopupWindow，Toast，Snackbar一样，都是内置的Window对象，他们通过window显示封装好的显示控件。
+  而Window表示的是一个窗口的概念，它是一个抽象类，它的具体实现是PhoneWindow。
+  Dialog和Activity的显示逻辑都是一样的，都是内部管理着一个Window对象，用Window对象实现界面的加载和显示逻辑
+
 
 * 解释下 Android 的 View 。
 
